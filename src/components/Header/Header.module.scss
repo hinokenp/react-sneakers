@@ -9,30 +9,35 @@
     display: flex;
     align-items: center;
     gap: 32px;
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #5c5c5c;
 
-    li {
+    li,
+    a {
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
   }
 }
 
 .headerMain {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #000;
+  }
 
   h3 {
     font-weight: 700;
-    font-size: 20px;
+    font-size: 1.25rem;
     text-transform: uppercase;
   }
 
   p {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #9d9d9d;
   }
 }

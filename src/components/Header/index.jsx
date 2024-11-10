@@ -1,29 +1,38 @@
 import styles from "./Header.module.scss";
+import { Link } from "react-router-dom";
 
-function Header() {
+function Header(props) {
+  // console.log(props);
   return (
     <header className={styles.header}>
       <div className={styles.headerMain}>
-        <img width={40} height={40} src="/img/logo.png" alt="Logo" />
-        <div>
-          <h3>React Sneakers</h3>
-          <p>Магазин лучших кроссовок</p>
-        </div>
+        <Link to="/">
+          <img width={40} height={40} src="/img/logo.png" alt="Logo" />
+          <div>
+            <h3>React Sneakers</h3>
+            <p>Магазин лучших кроссовок</p>
+          </div>
+        </Link>
       </div>
       <ul className="nav">
         <li>
           <img width={20} height={20} src="/img/cart.svg" alt="cart" />
-          <span>
+          <span onClick={props.onOpen}>
             <b>1205 руб.</b>
           </span>
         </li>
         <li>
-          <img width={20} height={20} src="/img/favorite.svg" alt="favorite" />
-          <span>Закладки</span>
+          <Link to="/favorites">
+            <img
+              width={20}
+              height={20}
+              src="/img/favorite.svg"
+              alt="favorite"
+            />
+          </Link>
         </li>
         <li>
           <img width={20} height={20} src="/img/user.svg" alt="user" />
-          <span>Профиль</span>
         </li>
       </ul>
     </header>

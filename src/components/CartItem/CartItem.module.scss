@@ -1,0 +1,23 @@
+.cartItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 20.3125rem;
+  padding: 20px;
+  border: 1px solid #f3f3f3;
+  border-radius: 20px;
+
+  // img {
+  //   width: 70px;
+  //   height: 70px;
+  // }
+
+  p {
+    padding-bottom: 8px;
+  }
+
+  span {
+    display: flex;
+    justify-content: space-between;
+  }
+}

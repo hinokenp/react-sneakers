@@ -3,11 +3,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  max-width: 220px;
+  max-width: 13.75rem;
   padding: 35px 30px;
   border: 1px solid #f3f3f3;
   border-radius: 40px;
-  font-size: 14px;
+  font-size: 0.875rem;
   top: 0px;
   transition: top 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
 
@@ -17,7 +17,7 @@
   }
 
   span {
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
     color: #bdbdbd;
     text-transform: uppercase;
@@ -41,7 +41,15 @@
   }
 }
 
+.active {
+  background-color: red;
+}
+
 .favorite {
   position: absolute;
   top: 30px;
+}
+
+.plus {
+  cursor: pointer;
 }
