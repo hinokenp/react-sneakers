@@ -1,11 +1,11 @@
+import { Link } from "react-router-dom";
 import Card from "../components/Card";
 
 function Favorites({
   favoriteItems = [],
+  cartItems,
   handleAddToFavorite,
-  handleDeleteFavorite,
   handleAddToCart,
-  handleDeleteFromCart,
 }) {
   return (
     <main className="main">
@@ -13,21 +13,33 @@ function Favorites({
         <h1>Мои закладки</h1>
       </div>
       <div className="mainWrapper">
-        {favoriteItems.map((item) => {
-          return (
-            <Card
-              key={item.id}
-              title={item.title}
-              price={item.price}
-              imageUrl={item.imageUrl}
-              onAddToCart={() => handleAddToCart(item)}
-              onDeleteFromCart={() => handleDeleteFromCart(item)}
-              onAddToFavorite={() => handleAddToFavorite(item)}
-              onDeleteFromFavorite={() => handleDeleteFavorite(item)}
-              favorited={true}
-            />
-          );
-        })}
+        {favoriteItems.length ? (
+          favoriteItems.map((item) => {
+            return (
+              <Card
+                key={item.id}
+                onAddToCart={() => handleAddToCart(item)}
+                onAddToFavorite={() => handleAddToFavorite(item)}
+                added={cartItems.some(
+                  (obj) => Number(obj.id) === Number(item.id)
+                )}
+                favorited
+                {...item}
+              />
+            );
+          })
+        ) : (
+          <div className="pageEpmty">
+            <img width={70} height={70} src="/img/fav-sad.png" alt=":(" />
+            <div>
+              <h3>Закладок нет</h3>
+              <p>Вы ничего не добавляли в закладки</p>
+              <Link to="/">
+                <button>Вернуться назад</button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

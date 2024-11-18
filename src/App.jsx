@@ -4,18 +4,28 @@ import Header from "./components/Header";
 import Cart from "./components/Cart";
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
+import Orders from "./pages/Orders";
 
 function App() {
-  const [cartDisplay, setCartDisplay] = useState(false);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [favoriteItems, setFavoritetItems] = useState([]);
   const [serchValue, setSearchValue] = useState("");
+  const [cartDisplay, setCartDisplay] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://672930f26d5fa4901b6c6fb4.mockapi.io/items")
-      .then((res) => res.json())
-      .then((json) => setItems(json));
+    async function fetchData() {
+      const response = await fetch(
+        "https://672930f26d5fa4901b6c6fb4.mockapi.io/items"
+      );
+      const items = await response.json();
+
+      setIsLoading(false);
+      setItems(items);
+    }
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -33,23 +43,32 @@ function App() {
   };
 
   const handleAddToCart = (obj) => {
-    setCartItems((prev) => [...prev, obj]);
+    console.log(obj);
+    if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
+      setCartItems((prev) => {
+        return prev.filter((item) => Number(item.id) !== Number(obj.id));
+      });
+    } else {
+      setCartItems((prev) => [...prev, obj]);
+    }
   };
 
   const handleDeleteFromCart = (obj) => {
+    console.log(obj);
     setCartItems((prev) => {
-      return prev.filter((item) => item !== obj);
+      return prev.filter((item) => Number(item.id) !== Number(obj.id));
     });
   };
 
   const handleAddToFavorite = (obj) => {
-    setFavoritetItems((prev) => [...prev, obj]);
-  };
-
-  const handleDeleteFavorite = (obj) => {
-    setFavoritetItems((prev) => {
-      return prev.filter((item) => item !== obj);
-    });
+    console.log(obj);
+    if (favoriteItems.find((item) => Number(item.id) === Number(obj.id))) {
+      setFavoritetItems((prev) => {
+        return prev.filter((item) => Number(item.id) !== Number(obj.id));
+      });
+    } else {
+      setFavoritetItems((prev) => [...prev, obj]);
+    }
   };
 
   const handleSearchValue = (e) => {
@@ -73,11 +92,12 @@ function App() {
             <Home
               handleSearchValue={handleSearchValue}
               handleAddToCart={handleAddToCart}
-              handleDeleteFromCart={handleDeleteFromCart}
               handleAddToFavorite={handleAddToFavorite}
-              handleDeleteFavorite={handleDeleteFavorite}
               serchValue={serchValue}
               items={items}
+              cartItems={cartItems}
+              favoriteItems={favoriteItems}
+              isLoading={isLoading}
             />
           }
         />
@@ -86,9 +106,19 @@ function App() {
           element={
             <Favorites
               handleAddToCart={handleAddToCart}
-              handleDeleteFromCart={handleDeleteFromCart}
               handleAddToFavorite={handleAddToFavorite}
-              handleDeleteFavorite={handleDeleteFavorite}
+              cartItems={cartItems}
+              favoriteItems={favoriteItems}
+            />
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <Orders
+              handleAddToCart={handleAddToCart}
+              handleAddToFavorite={handleAddToFavorite}
+              cartItems={cartItems}
               favoriteItems={favoriteItems}
             />
           }

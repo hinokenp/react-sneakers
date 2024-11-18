@@ -3,12 +3,33 @@ import Card from "../components/Card";
 function Home({
   items,
   serchValue,
+  cartItems,
+  favoriteItems,
+  isLoading,
   handleSearchValue,
   handleAddToCart,
-  handleDeleteFromCart,
   handleAddToFavorite,
-  handleDeleteFavorite,
 }) {
+  const renderItems = () => {
+    const filteredItems = items.filter((obj) =>
+      obj.title.toLowerCase().includes(serchValue.toLowerCase())
+    );
+
+    return (isLoading ? [...Array(8)] : filteredItems).map((item, index) => (
+      <Card
+        key={item?.id || index}
+        onAddToCart={() => handleAddToCart(item)}
+        onAddToFavorite={() => handleAddToFavorite(item)}
+        added={cartItems.some((obj) => Number(obj.id) === Number(item.id))}
+        favorited={favoriteItems.some(
+          (obj) => Number(obj.id) === Number(item.id)
+        )}
+        loading={isLoading}
+        {...item}
+      />
+    ));
+  };
+
   return (
     <main className="main">
       <div className="mainHeader">
@@ -23,26 +44,7 @@ function Home({
           />
         </div>
       </div>
-      <div className="mainWrapper">
-        {items
-          .filter((obj) =>
-            obj.title.toLowerCase().includes(serchValue.toLowerCase())
-          )
-          .map((item) => {
-            return (
-              <Card
-                key={item.id}
-                title={item.title}
-                price={item.price}
-                imageUrl={item.imageUrl}
-                onAddToCart={() => handleAddToCart(item)}
-                onDeleteFromCart={() => handleDeleteFromCart(item)}
-                onAddToFavorite={() => handleAddToFavorite(item)}
-                onDeleteFromFavorite={() => handleDeleteFavorite(item)}
-              />
-            );
-          })}
-      </div>
+      <div className="mainWrapper">{renderItems()}</div>
     </main>
   );
 }

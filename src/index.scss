@@ -51,8 +51,9 @@ body {
 
   &Wrapper {
     display: flex;
-    gap: 36px;
     flex-wrap: wrap;
+    min-height: 60vh;
+    gap: 36px;
   }
 }
 
@@ -70,5 +71,66 @@ body {
   input {
     border: none;
     outline: none;
+  }
+}
+
+.pageEpmty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+  gap: 30px;
+  // padding-top: ;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  h3 {
+    // text-align: center;
+    font-weight: 600;
+    font-size: 22px;
+  }
+
+  p {
+    font-size: 16px;
+    opacity: 0.4;
+    line-height: 150%;
+    text-align: center;
+    max-width: 280px;
+    padding-top: 10px;
+    padding-bottom: 40px;
+  }
+
+  button {
+    width: 245px;
+    padding: 18px 30px;
+    background-color: #9dd458;
+    border: none;
+    border-radius: 18px;
+    font-weight: 600;
+    position: relative;
+    color: #fff;
+
+    &::after {
+      content: url("/img/arrow.svg");
+      rotate: 180deg;
+      transition: left 0.5s ease-in-out;
+      position: absolute;
+      left: 25px;
+      top: 17px;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      &::after {
+        left: 5px;
+      }
+    }
   }
 }

@@ -18,6 +18,7 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
               {cartItems.map((item) => {
                 return (
                   <CartItem
+                    key={item.id}
                     title={item.title}
                     price={item.price}
                     imageUrl={item.imageUrl}
@@ -49,7 +50,7 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
             <img src="/img/box.png" alt="" />
             <h3>Корзина пустая</h3>
             <p> Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-            <button>Вернуться назад</button>
+            <button onClick={onClose}>Вернуться назад</button>
           </div>
         )}
       </div>

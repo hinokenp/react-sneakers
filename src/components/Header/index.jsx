@@ -2,7 +2,6 @@ import styles from "./Header.module.scss";
 import { Link } from "react-router-dom";
 
 function Header(props) {
-  // console.log(props);
   return (
     <header className={styles.header}>
       <div className={styles.headerMain}>
@@ -32,7 +31,9 @@ function Header(props) {
           </Link>
         </li>
         <li>
-          <img width={20} height={20} src="/img/user.svg" alt="user" />
+          <Link to="/orders">
+            <img width={20} height={20} src="/img/user.svg" alt="user" />
+          </Link>
         </li>
       </ul>
     </header>
