@@ -3,8 +3,6 @@ import Card from "../components/Card";
 function Home({
   items,
   serchValue,
-  cartItems,
-  favoriteItems,
   isLoading,
   handleSearchValue,
   handleAddToCart,
@@ -20,10 +18,6 @@ function Home({
         key={item?.id || index}
         onAddToCart={() => handleAddToCart(item)}
         onAddToFavorite={() => handleAddToFavorite(item)}
-        added={cartItems.some((obj) => Number(obj.id) === Number(item.id))}
-        favorited={favoriteItems.some(
-          (obj) => Number(obj.id) === Number(item.id)
-        )}
         loading={isLoading}
         {...item}
       />

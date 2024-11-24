@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { AppContext } from "./context";
 import Header from "./components/Header";
 import Cart from "./components/Cart";
 import Home from "./pages/Home";
@@ -10,19 +11,30 @@ function App() {
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [favoriteItems, setFavoritetItems] = useState([]);
+  const [orderItems, setOrderItems] = useState([]);
   const [serchValue, setSearchValue] = useState("");
   const [cartDisplay, setCartDisplay] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(
-        "https://672930f26d5fa4901b6c6fb4.mockapi.io/items"
-      );
-      const items = await response.json();
+      try {
+        const itemsResponse = await fetch(
+          "https://672930f26d5fa4901b6c6fb4.mockapi.io/items"
+        );
+        const items = await itemsResponse.json();
+        const ordersResponse = await fetch(
+          "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders"
+        );
+        const orderItems = await ordersResponse.json();
 
-      setIsLoading(false);
-      setItems(items);
+        setIsLoading(false);
+        setItems(items);
+        setOrderItems(orderItems);
+      } catch (error) {
+        alert("Ошибка при запросе данных");
+        console.error(error);
+      }
     }
 
     fetchData();
@@ -43,7 +55,6 @@ function App() {
   };
 
   const handleAddToCart = (obj) => {
-    console.log(obj);
     if (cartItems.find((item) => Number(item.id) === Number(obj.id))) {
       setCartItems((prev) => {
         return prev.filter((item) => Number(item.id) !== Number(obj.id));
@@ -54,14 +65,12 @@ function App() {
   };
 
   const handleDeleteFromCart = (obj) => {
-    console.log(obj);
     setCartItems((prev) => {
       return prev.filter((item) => Number(item.id) !== Number(obj.id));
     });
   };
 
   const handleAddToFavorite = (obj) => {
-    console.log(obj);
     if (favoriteItems.find((item) => Number(item.id) === Number(obj.id))) {
       setFavoritetItems((prev) => {
         return prev.filter((item) => Number(item.id) !== Number(obj.id));
@@ -75,56 +84,79 @@ function App() {
     setSearchValue(e.target.value);
   };
 
+  // Rename
+  const handleAddBtn = (id) => {
+    return cartItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
+  // Rename
+  const handleFavoriteBtn = (id) => {
+    return favoriteItems.some((obj) => Number(obj.id) === Number(id));
+  };
+
+  const handleAddToOrder = (obj) => {
+    setOrderItems((prev) => [...prev, obj]);
+  };
+
   return (
-    <div className="wrapper">
-      {cartDisplay && (
-        <Cart
-          onClose={handleCartDisplay}
-          cartItems={cartItems}
-          onDeleteFromCart={(obj) => handleDeleteFromCart(obj)}
-        />
-      )}
-      <Header onOpen={handleCartDisplay} />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              handleSearchValue={handleSearchValue}
-              handleAddToCart={handleAddToCart}
-              handleAddToFavorite={handleAddToFavorite}
-              serchValue={serchValue}
-              items={items}
-              cartItems={cartItems}
-              favoriteItems={favoriteItems}
-              isLoading={isLoading}
-            />
-          }
-        />
-        <Route
-          path="/favorites"
-          element={
-            <Favorites
-              handleAddToCart={handleAddToCart}
-              handleAddToFavorite={handleAddToFavorite}
-              cartItems={cartItems}
-              favoriteItems={favoriteItems}
-            />
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <Orders
-              handleAddToCart={handleAddToCart}
-              handleAddToFavorite={handleAddToFavorite}
-              cartItems={cartItems}
-              favoriteItems={favoriteItems}
-            />
-          }
-        />
-      </Routes>
-    </div>
+    <AppContext.Provider
+      value={{
+        isLoading,
+        cartDisplay,
+        setCartItems,
+        handleAddBtn,
+        handleFavoriteBtn,
+        handleAddToCart,
+        handleAddToFavorite,
+        handleAddToOrder,
+      }}
+    >
+      <div className="wrapper">
+        {cartDisplay && (
+          <Cart
+            onClose={handleCartDisplay}
+            cartItems={cartItems}
+            onDeleteFromCart={(obj) => handleDeleteFromCart(obj)}
+          />
+        )}
+        <Header onOpen={handleCartDisplay} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                handleAddToCart={handleAddToCart}
+                handleAddToFavorite={handleAddToFavorite}
+                handleSearchValue={handleSearchValue}
+                serchValue={serchValue}
+                items={items}
+                isLoading={isLoading}
+              />
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <Favorites
+                handleAddToCart={handleAddToCart}
+                handleAddToFavorite={handleAddToFavorite}
+                favoriteItems={favoriteItems}
+              />
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <Orders
+                handleAddToCart={handleAddToCart}
+                handleAddToFavorite={handleAddToFavorite}
+                orderItems={orderItems}
+              />
+            }
+          />
+        </Routes>
+      </div>
+    </AppContext.Provider>
   );
 }
 

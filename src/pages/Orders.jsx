@@ -1,22 +1,37 @@
-import { Link } from "react-router-dom";
+// import Card from "../components/Card";
+import Info from "../components/Info";
+import Order from "../components/Order";
 
-function Orders() {
+function Orders({ orderItems = [], handleAddToCart, handleAddToFavorite }) {
   return (
     <main className="main">
       <div className="mainHeader">
         <h1>Мои заказы</h1>
       </div>
       <div className="mainWrapper">
-        <div className="pageEpmty">
-          <img width={70} height={70} src="/img/orders-emoji.png" alt=":(" />
+        {orderItems.length ? (
           <div>
-            <h3>У вас нет заказов</h3>
-            <p>Вы нищеброд? Оформите хотя бы один заказ.</p>
-            <Link to="/">
-              <button>Вернуться назад</button>
-            </Link>
+            {orderItems.map((order) => {
+              return (
+                <Order
+                  key={order.id}
+                  id={order.id}
+                  items={order.items}
+                  handleAddToCart={handleAddToCart}
+                  handleAddToFavorite={handleAddToFavorite}
+                />
+              );
+            })}
           </div>
-        </div>
+        ) : (
+          <Info
+            imgSrc="/img/orders-emoji.png"
+            title="У вас нет заказов"
+            description="Вы нищеброд? Оформите хотя бы один заказ."
+            buttonText="Вернуться назад"
+            buttonLink="/"
+          />
+        )}
       </div>
     </main>
   );

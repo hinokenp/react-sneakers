@@ -1,8 +1,40 @@
+import { useContext, useState } from "react";
+import { AppContext } from "../../context";
 import styles from "./Cart.module.scss";
 import CartItem from "../CartItem";
+import Info from "../Info";
 
 function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
-  console.log(cartItems);
+  const [isLoading, setIsLoading] = useState(false);
+  const [orderComplete, setOrderComplete] = useState(false);
+  const [orderId, setOrderId] = useState();
+  const { setCartItems, handleAddToOrder } = useContext(AppContext);
+
+  const handleClickOrders = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ items: cartItems }),
+        }
+      );
+      const data = await response.json();
+
+      handleAddToOrder(data);
+      setOrderId(data.id);
+      setCartItems([]);
+      setOrderComplete(true);
+    } catch (error) {
+      alert("Ошибка при создании заказа");
+      console.error(error);
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <>
       <div className={styles.overlay} onClick={onClose}></div>
@@ -42,16 +74,23 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
                   <b>1074 руб.</b>
                 </p>
               </div>
-              <button>Оформить заказ</button>
+              <button disabled={isLoading} onClick={handleClickOrders}>
+                Оформить заказ
+              </button>
             </div>
           </>
         ) : (
-          <div className={styles.cartEmpty}>
-            <img src="/img/box.png" alt="" />
-            <h3>Корзина пустая</h3>
-            <p> Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-            <button onClick={onClose}>Вернуться назад</button>
-          </div>
+          <Info
+            imgSrc={orderComplete ? "/img/order-complete.png" : "/img/box.png"}
+            title={orderComplete ? "Заказ оформлен!" : "Корзина пустая"}
+            description={
+              orderComplete
+                ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
+                : "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+            }
+            buttonText="Вернуться назад"
+            onButtonClick={onClose}
+          />
         )}
       </div>
     </>
