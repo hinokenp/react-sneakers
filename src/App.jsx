@@ -20,11 +20,11 @@ function App() {
     async function fetchData() {
       try {
         const itemsResponse = await fetch(
-          "https://672930f26d5fa4901b6c6fb4.mockapi.io/items"
+          "https://67446a71b4e2e04abea21f70.mockapi.io/items"
         );
         const items = await itemsResponse.json();
         const ordersResponse = await fetch(
-          "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders"
+          "https://67446a71b4e2e04abea21f70.mockapi.io/orders"
         );
         const orderItems = await ordersResponse.json();
 

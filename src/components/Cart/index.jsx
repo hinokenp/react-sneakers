@@ -14,7 +14,7 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
     try {
       setIsLoading(true);
       const response = await fetch(
-        "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders",
+        "https://67446a71b4e2e04abea21f70.mockapi.io/orders",
         {
           method: "POST",
           headers: { "content-type": "application/json" },
