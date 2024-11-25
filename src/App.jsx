@@ -8,7 +8,6 @@ import Favorites from "./pages/Favorites";
 import Orders from "./pages/Orders";
 
 function App() {
-  const API_URL = import.meta.env.VITE_API_URL;
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [favoriteItems, setFavoritetItems] = useState([]);
@@ -20,9 +19,13 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const itemsResponse = await fetch(`${API_URL}/items`);
+        const itemsResponse = await fetch(
+          "https://672930f26d5fa4901b6c6fb4.mockapi.io/items"
+        );
         const items = await itemsResponse.json();
-        const ordersResponse = await fetch(`${API_URL}/orders`);
+        const ordersResponse = await fetch(
+          "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders"
+        );
         const orderItems = await ordersResponse.json();
 
         setIsLoading(false);
