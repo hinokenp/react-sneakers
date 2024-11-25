@@ -30,6 +30,8 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    // max-height: 550px;
+    overflow-y: scroll;
     padding-top: 30px;
     gap: 20px;
   }
@@ -133,6 +135,10 @@
       }
     }
   }
+}
+
+.sum {
+  padding-top: 50px;
 }
 
 @keyframes button-loading {

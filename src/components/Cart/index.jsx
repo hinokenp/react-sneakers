@@ -5,6 +5,7 @@ import CartItem from "../CartItem";
 import Info from "../Info";
 
 function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [isLoading, setIsLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState();
@@ -13,14 +14,11 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
   const handleClickOrders = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(
-        "https://672930f26d5fa4901b6c6fb4.mockapi.io/orders",
-        {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ items: cartItems }),
-        }
-      );
+      const response = await fetch(`${API_URL}/orders`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ items: cartItems }),
+      });
       const data = await response.json();
 
       handleAddToOrder(data);
@@ -60,18 +58,11 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
               })}
             </div>
             <div className={styles.cartFooter}>
-              <div className="sum">
+              <div className={styles.sum}>
                 <p>Итого</p>
                 <span></span>
                 <p>
                   <b>21 496 руб.</b>
-                </p>
-              </div>
-              <div className="sum">
-                <p>Налог 5%</p>
-                <span></span>
-                <p>
-                  <b>1074 руб.</b>
                 </p>
               </div>
               <button disabled={isLoading} onClick={handleClickOrders}>

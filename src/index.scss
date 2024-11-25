@@ -91,3 +91,15 @@ body {
   flex-wrap: wrap;
   gap: 36px;
 }
+
+@media (max-width: 600px) {
+  .main {
+    &Header {
+      flex-direction: column;
+    }
+
+    &Wrapper {
+      justify-content: center;
+    }
+  }
+}
