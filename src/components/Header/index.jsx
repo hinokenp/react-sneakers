@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import { AppContext } from "../../context";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.scss";
 
 function Header(props) {
+  const { totalPrice } = useContext(AppContext);
+
   return (
     <header className={styles.header}>
       <div className={styles.headerMain}>
@@ -17,7 +21,7 @@ function Header(props) {
         <li>
           <img width={20} height={20} src="/img/cart.svg" alt="cart" />
           <span onClick={props.onOpen}>
-            <b>1205 руб.</b>
+            <b>{totalPrice} руб.</b>
           </span>
         </li>
         <li>

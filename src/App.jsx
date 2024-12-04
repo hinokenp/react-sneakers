@@ -13,7 +13,7 @@ function App() {
   const [favoriteItems, setFavoritetItems] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [serchValue, setSearchValue] = useState("");
-  const [cartDisplay, setCartDisplay] = useState(false);
+  const [cartDisplay, setCartDisplay] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (cartDisplay) {
+    if (!cartDisplay) {
       document.body.classList.add("modalOpened");
     }
 
@@ -84,12 +84,10 @@ function App() {
     setSearchValue(e.target.value);
   };
 
-  // Rename
   const handleAddBtn = (id) => {
     return cartItems.some((obj) => Number(obj.id) === Number(id));
   };
 
-  // Rename
   const handleFavoriteBtn = (id) => {
     return favoriteItems.some((obj) => Number(obj.id) === Number(id));
   };
@@ -98,11 +96,14 @@ function App() {
     setOrderItems((prev) => [...prev, obj]);
   };
 
+  const totalPrice = cartItems.reduce((sum, current) => {
+    return sum + +current.price;
+  }, 0);
+
   return (
     <AppContext.Provider
       value={{
-        isLoading,
-        cartDisplay,
+        totalPrice,
         setCartItems,
         handleAddBtn,
         handleFavoriteBtn,
@@ -112,13 +113,13 @@ function App() {
       }}
     >
       <div className="wrapper">
-        {cartDisplay && (
-          <Cart
-            onClose={handleCartDisplay}
-            cartItems={cartItems}
-            onDeleteFromCart={(obj) => handleDeleteFromCart(obj)}
-          />
-        )}
+        <Cart
+          onClose={handleCartDisplay}
+          cartDisplay={cartDisplay}
+          cartItems={cartItems}
+          onDeleteFromCart={(obj) => handleDeleteFromCart(obj)}
+        />
+
         <Header onOpen={handleCartDisplay} />
         <Routes>
           <Route

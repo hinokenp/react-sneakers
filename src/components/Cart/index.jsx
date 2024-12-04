@@ -4,11 +4,11 @@ import styles from "./Cart.module.scss";
 import CartItem from "../CartItem";
 import Info from "../Info";
 
-function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
+function Cart({ cartItems = [], onClose, onDeleteFromCart, cartDisplay }) {
   const [isLoading, setIsLoading] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState();
-  const { setCartItems, handleAddToOrder } = useContext(AppContext);
+  const { setCartItems, handleAddToOrder, totalPrice } = useContext(AppContext);
 
   const handleClickOrders = async () => {
     try {
@@ -35,10 +35,22 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
     setIsLoading(false);
   };
 
+  console.log(onClose);
+
   return (
     <>
-      <div className={styles.overlay} onClick={onClose}></div>
-      <div className={styles.cart}>
+      {/* styles.cart  */}
+      <div
+        className={`${styles.overlay} ${
+          cartDisplay ? styles.visibilityHidden : ""
+        } `}
+        onClick={onClose}
+      ></div>
+      <div
+        className={`${styles.cart} ${
+          cartDisplay ? styles.visibilityHidden : ""
+        } `}
+      >
         <div className={styles.cartHeader}>
           <h2>Корзина</h2>
           <img onClick={onClose} src="/img/btn-close.svg" alt="" />
@@ -64,7 +76,7 @@ function Cart({ cartItems = [], onClose, onDeleteFromCart }) {
                 <p>Итого</p>
                 <span></span>
                 <p>
-                  <b>21 496 руб.</b>
+                  <b>{totalPrice} руб.</b>
                 </p>
               </div>
               <button disabled={isLoading} onClick={handleClickOrders}>
